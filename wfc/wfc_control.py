@@ -354,6 +354,7 @@ def execute_wfc(
     time_solve_end = None
 
     solution_tile_grid = None
+    solution_image_filename = None
     print("solving...")
     attempts = 0
     while attempts < attempt_limit:
@@ -391,11 +392,12 @@ def execute_wfc(
 
                 print("Solution:")
                 # print(solution_tile_grid)
+                solution_image_filename = filename + "_" + timecode + ".png"
                 render_tiles_to_output(
                     solution_tile_grid,
                     tile_catalog,
                     [tile_size, tile_size],
-                    filename + "_" + timecode + ".png",
+                    solution_image_filename,
                 )
 
                 time_solve_end = time.time()
@@ -443,8 +445,8 @@ def execute_wfc(
         outstats.update(stats)
         if not log_stats_to_output is None:
             log_stats_to_output(outstats, output_destination + log_filename + ".tsv")
-        if not solution_tile_grid is None:
-            return solution_tile_grid
+        if not solution_image_filename is None:
+            return solution_image_filename
         if end_early:
             return None
 
