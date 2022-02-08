@@ -1,5 +1,6 @@
 """Convert input data to adjacency information"""
 import numpy as np
+import functools
 
 
 def adjacency_extraction(
@@ -7,9 +8,8 @@ def adjacency_extraction(
 ):
     """Takes a pattern grid and returns a list of all of the legal adjacencies found in it."""
 
-    def is_valid_overlap_xy(adjacency_direction, pattern_1, pattern_2):
-        """Given a direction and two patterns, find the overlap of the two patterns 
-        and return True if the intersection matches."""
+    @functools.lru_cache(maxsize=None)
+    def get_shifted_pattern(adjacency_direction, pattern_2):
         dimensions = (1, 0)
         not_a_number = -1
 
@@ -28,7 +28,12 @@ def adjacency_extraction(
             pattern_size[0] : pattern_size[0] + pattern_size[0],
             pattern_size[1] : pattern_size[1] + pattern_size[1],
         ]
+        return compare
 
+    def is_valid_overlap_xy(adjacency_direction, pattern_1, pattern_2):
+        """Given a direction and two patterns, find the overlap of the two patterns 
+        and return True if the intersection matches."""
+        compare = get_shifted_pattern(adjacency_direction, pattern_2)
         left = max(0, 0, +adjacency_direction[0])
         right = min(pattern_size[0], pattern_size[0] + adjacency_direction[0])
         top = max(0, 0 + adjacency_direction[1])
