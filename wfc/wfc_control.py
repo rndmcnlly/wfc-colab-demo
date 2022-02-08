@@ -114,7 +114,7 @@ def execute_wfc(
     }
 
     # Load the image
-    img = imageio.imread(input_folder + filename + ".png")
+    img = imageio.imread(filename)
     img = img[:, :, :3]  # TODO: handle alpha channels
 
     # TODO: generalize this to more than the four cardinal directions
